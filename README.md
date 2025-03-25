@@ -42,4 +42,7 @@ $ docker-compose up
 
 ### TO-BE
 
+### ERD
+![erd](images/comunity-board-erd.png)
+
 ### Environment
