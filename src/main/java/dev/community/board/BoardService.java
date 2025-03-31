@@ -1,5 +1,6 @@
 package dev.community.board;
 
+import dev.community.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,12 +30,12 @@ public class BoardService {
 
 	public Board getSingleBoard(Long boardId) {
 		return repository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다"));
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
 	}
 
 	public Board updateBoard(Long boardId, Board newBoard) {
 		Board oldBoard = repository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다"));
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
 
 		Board board = Board.builder().title(newBoard.getTitle()).content(newBoard.getContent())
 				.member(oldBoard.getMember()).build();
@@ -44,7 +45,7 @@ public class BoardService {
 
 	public void deleteBoard(Long boardId) {
 		Board board = repository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다"));
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
 		repository.delete(board);
 	}
 

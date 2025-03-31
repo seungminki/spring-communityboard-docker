@@ -1,5 +1,6 @@
 package dev.community.comment;
 
+import dev.community.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,12 +30,12 @@ public class CommentService {
 
 	public Comment getSingleComment(Long commentId) {
 		return repository.findById(commentId)
-			.orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다"));
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_COMMENT_ID.getMessage()));
 	}
 
 	public Comment updateComment(Long commentId, Comment newComment) {
 		Comment oldComment = repository.findById(commentId)
-				.orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다"));
+				.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_COMMENT_ID.getMessage()));
 
 		Comment comment = Comment.builder().content(newComment.getContent()).member(oldComment.getMemberId())
 				.board(oldComment.getBoardId()).build();
@@ -44,7 +45,7 @@ public class CommentService {
 
 	public void deleteComment(Long commentId) {
 		Comment comment = repository.findById(commentId)
-				.orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다"));
+				.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_COMMENT_ID.getMessage()));
 		repository.delete(comment);
 	}
 

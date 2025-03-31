@@ -1,5 +1,6 @@
 package dev.community.member;
 
+import dev.community.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,13 @@ public class MemberService {
 	}
 
 	public Member getSingleMember(Long memberId) {
-		return repository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("멤버가 존재하지 않습니다"));
+		return repository.findById(memberId)
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
 	}
 
 	public Member updateMember(Long memberId, Member newMember) {
 		Member oldMember = repository.findById(memberId)
-				.orElseThrow(() -> new IllegalArgumentException("멤버가 존재하지 않습니다"));
+				.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
 
 		Member member = Member.builder().name(newMember.getName()).email(oldMember.getEmail())
 				.password(oldMember.getPassword()).build();
@@ -39,7 +41,8 @@ public class MemberService {
 	}
 
 	public void deleteMember(Long memberId) {
-		Member member = repository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("멤버가 존재하지 않습니다"));
+		Member member = repository.findById(memberId)
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
 		repository.delete(member);
 	}
 
