@@ -1,21 +1,20 @@
-package dev.community.comment;
+package dev.community.entity;
 
-import dev.community.board.Board;
-import dev.community.member.Member;
-import dev.community.model.BaseEntity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Table(name = "comments")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment extends BaseEntity {
+public class Comment {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column
 	private String content;
@@ -37,6 +36,10 @@ public class Comment extends BaseEntity {
 		this.member = member;
 		this.board = board;
 		this.createdAt = LocalDateTime.now();
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getContent() {

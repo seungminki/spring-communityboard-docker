@@ -1,5 +1,7 @@
-package dev.community.board;
+package dev.community.controller;
 
+import dev.community.service.BoardService;
+import dev.community.entity.Board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

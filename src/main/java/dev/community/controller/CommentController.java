@@ -1,5 +1,7 @@
-package dev.community.comment;
+package dev.community.controller;
 
+import dev.community.service.CommentService;
+import dev.community.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

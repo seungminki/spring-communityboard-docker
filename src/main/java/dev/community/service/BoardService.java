@@ -1,6 +1,8 @@
-package dev.community.board;
+package dev.community.service;
 
 import dev.community.ErrorMessage;
+import dev.community.repository.BoardRepository;
+import dev.community.entity.Board;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,8 +17,8 @@ public class BoardService {
 	private final BoardRepository repository;
 
 	public Board createBoard(Board board) {
-		Board newBoard = Board.builder().
-			title(board.getTitle())
+		Board newBoard = Board.builder()
+			.title(board.getTitle())
 			.content(board.getContent())
 			.member(board.getMember())
 			.build();

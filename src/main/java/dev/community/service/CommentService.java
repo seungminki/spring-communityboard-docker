@@ -1,6 +1,8 @@
-package dev.community.comment;
+package dev.community.service;
 
 import dev.community.ErrorMessage;
+import dev.community.entity.Comment;
+import dev.community.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

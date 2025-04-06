@@ -1,29 +1,24 @@
-package dev.community.board;
+package dev.community.entity;
 
-import dev.community.member.Member;
-import dev.community.model.BaseEntity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Table(name = "boards")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board extends BaseEntity {
+public class Board {
 
-	@NotNull
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
 	private String title;
-
-	@NotNull
 	private String content;
-
 	private int reviewCount;
-
 	private int likeCount;
 
 	@ManyToOne
