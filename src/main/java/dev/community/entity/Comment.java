@@ -3,6 +3,7 @@ package dev.community.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Comment {
 
 	@Id
@@ -38,24 +40,8 @@ public class Comment {
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public String getContent() {
-		return this.content;
-	}
-
-	public Board getBoardId() {
-		return this.board;
-	}
-
-	public Member getMemberId() {
-		return this.member;
-	}
-
-	public LocalDateTime getCreatedAt() {
-		return this.createdAt;
+	public String setContent(String content) {
+		return this.content = content;
 	}
 
 }
