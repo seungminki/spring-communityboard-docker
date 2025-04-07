@@ -22,17 +22,17 @@ class CommentController {
 		return commentService.getComments();
 	}
 
-	@GetMapping("/all")
+	@GetMapping("/all/bymember")
 	List<Comment> allCommentsByMember(@RequestBody Member member) {
 		return commentService.getCommentsByMember(member.getId());
 	}
 
-	@GetMapping("/all")
+	@GetMapping("/all/byboard")
 	List<Comment> allCommentsByBoard(@RequestBody Board board) {
 		return commentService.getCommentsByBoard(board.getId());
 	}
 
-	@GetMapping("/all")
+	@GetMapping("/all/bymemberandboard")
 	List<Comment> allCommentsByMemberAndBoard(@RequestBody Member member, Board board) {
 		return commentService.getCommentsByMemberAndBoard(member.getId(), board.getId());
 	}

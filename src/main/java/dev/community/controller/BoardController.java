@@ -21,7 +21,7 @@ public class BoardController {
 		return boardService.getBoards();
 	}
 
-	@GetMapping("/all")
+	@GetMapping("/all/bymember")
 	List<Board> allBoardsByMember(@RequestBody Member member) {
 		return boardService.getBoardsByMember(member.getId());
 	}
