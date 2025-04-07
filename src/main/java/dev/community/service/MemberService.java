@@ -55,9 +55,9 @@ public class MemberService {
 		}
 	}
 
-	public Member updateName(Principal principal, String newName) {
+	public Member updateName(String memberEmail, String newName) {
 
-		Member member = memberRepository.findByEmail(principal.getName())
+		Member member = memberRepository.findByEmail(memberEmail)
 			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_TOKEN.getMessage()));
 
 		member.setName(newName);
@@ -65,8 +65,8 @@ public class MemberService {
 		return memberRepository.save(member);
 	}
 
-	public void deleteMember(Principal principal) {
-		Member member = memberRepository.findByEmail(principal.getName())
+	public void deleteMember(String memberEmail) {
+		Member member = memberRepository.findByEmail(memberEmail)
 			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_TOKEN.getMessage()));
 
 		memberRepository.delete(member);

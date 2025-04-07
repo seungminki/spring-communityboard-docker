@@ -1,41 +1,61 @@
 package dev.community.controller;
 
+import dev.community.entity.Board;
+import dev.community.entity.Member;
 import dev.community.service.CommentService;
 import dev.community.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/comments")
 class CommentController {
 
-	private final CommentService service;
+	private final CommentService commentService;
 
-	@GetMapping("/comments")
+	@GetMapping("/all")
 	List<Comment> allComments() {
-		return service.getComments();
+		return commentService.getComments();
 	}
 
-	@PostMapping("/comments")
-	Comment newComment(@RequestBody Comment newComment) {
-		return service.createComment(newComment);
+	@GetMapping("/all")
+	List<Comment> allCommentsByMember(@RequestBody Member member) {
+		return commentService.getCommentsByMember(member.getId());
 	}
 
-	@GetMapping("/comments/{id}")
+	@GetMapping("/all")
+	List<Comment> allCommentsByBoard(@RequestBody Board board) {
+		return commentService.getCommentsByBoard(board.getId());
+	}
+
+	@GetMapping("/all")
+	List<Comment> allCommentsByMemberAndBoard(@RequestBody Member member, Board board) {
+		return commentService.getCommentsByMemberAndBoard(member.getId(), board.getId());
+	}
+
+	@GetMapping("/{id}")
 	Comment getComment(@PathVariable Long id) {
-		return service.getSingleComment(id);
+		return commentService.getSingleComment(id);
 	}
 
-	@PutMapping("/comments/{id}")
-	Comment updateComment(@PathVariable Long id, @RequestBody Comment newComment) {
-		return service.updateComment(id, newComment);
+	@PostMapping("/create")
+	Comment newComment(Principal principal, @RequestBody Board board, Comment comment) {
+		return commentService.createComment(principal.getName(), board.getId(), comment);
 	}
 
-	@DeleteMapping("/comments/{id}")
-	void deleteComment(@PathVariable Long id) {
-		service.deleteComment(id);
+
+	@PutMapping("/update/{id}")
+	Comment updateComment(Principal principal,  @PathVariable Long id, @RequestBody Comment newComment) {
+		return commentService.updateComment(principal.getName(), id, newComment.getContent());
+	}
+
+	@DeleteMapping("/delete/{id}")
+	void deleteComment(Principal principal, @PathVariable Long id) {
+		commentService.deleteComment(principal.getName(), id);
 	}
 
 }

@@ -34,12 +34,12 @@ class MemberController {
 
 	@PutMapping("/update")
 	Member updateMember(Principal principal, @RequestBody Member member) {
-		return memberService.updateName(principal, member.getName());
+		return memberService.updateName(principal.getName(), member.getName());
 	}
 
 	@DeleteMapping("/delete")
 	void deleteMember(Principal principal) {
-		memberService.deleteMember(principal);
+		memberService.deleteMember(principal.getName());
 	}
 
 }

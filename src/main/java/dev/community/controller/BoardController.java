@@ -1,41 +1,49 @@
 package dev.community.controller;
 
+import dev.community.entity.Member;
 import dev.community.service.BoardService;
 import dev.community.entity.Board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/boards")
 public class BoardController {
 
-	private final BoardService service;
+	private final BoardService boardService;
 
-	@GetMapping("/boards")
+	@GetMapping("/all")
 	List<Board> allBoards() {
-		return service.getBoards();
+		return boardService.getBoards();
 	}
 
-	@PostMapping("/boards")
-	Board newBoard(@RequestBody Board newBoard) {
-		return service.createBoard(newBoard);
+	@GetMapping("/all")
+	List<Board> allBoardsByMember(@RequestBody Member member) {
+		return boardService.getBoardsByMember(member.getId());
 	}
 
-	@GetMapping("/boards/{id}")
+	@GetMapping("/{id}")
 	Board getBoard(@PathVariable Long id) {
-		return service.getSingleBoard(id);
+		return boardService.getSingleBoard(id);
 	}
 
-	@PutMapping("/boards/{id}")
-	Board updateBoard(@PathVariable Long id, @RequestBody Board newBoard) {
-		return service.updateBoard(id, newBoard);
+	@PostMapping("/create")
+	Board newBoard(Principal principal, @RequestBody Board newBoard) {
+		return boardService.createBoard(principal.getName(), newBoard);
 	}
 
-	@DeleteMapping("/boards/{id}")
-	void deleteBoard(@PathVariable Long id) {
-		service.deleteBoard(id);
+	@PutMapping("/update/{id}")
+	Board updateBoard(Principal principal, @PathVariable Long id, @RequestBody Board newBoard) {
+		return boardService.updateBoard(principal.getName(), id, newBoard.getTitle(), newBoard.getContent());
+	}
+
+	@DeleteMapping("/delete/{id}")
+	void deleteBoard(Principal principal, @PathVariable Long id) {
+		boardService.deleteBoard(principal.getName(), id);
 	}
 
 }
