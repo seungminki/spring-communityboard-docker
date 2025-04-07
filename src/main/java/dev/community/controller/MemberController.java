@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/members")
@@ -26,11 +25,6 @@ class MemberController {
 	@GetMapping("/all")
 	public List<Member> members() { return memberService.findMembers(); }
 
-	@GetMapping("/find")
-	public Optional<Member> findMember(@RequestBody Long memberId) {
-		return memberService.findOne(memberId);
-	}
-
 	@PostMapping("/login")
 	public String login(@RequestBody Member req) {
 
@@ -39,8 +33,8 @@ class MemberController {
 	}
 
 	@PutMapping("/update")
-	Member updateMember(Principal principal, @RequestBody String newName) {
-		return memberService.updateName(principal, newName);
+	Member updateMember(Principal principal, @RequestBody Member member) {
+		return memberService.updateName(principal, member.getName());
 	}
 
 	@DeleteMapping("/delete")
