@@ -27,8 +27,4 @@ public class Member {
 		this.name = name;
 		this.password = password;
 	}
-
-	public String setName(String name) {
-		return this.name = name;
-	}
 }

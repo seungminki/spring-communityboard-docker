@@ -40,8 +40,4 @@ public class Comment {
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public String setContent(String content) {
-		return this.content = content;
-	}
-
 }

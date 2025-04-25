@@ -39,13 +39,4 @@ public class Board {
 		this.member = member;
 		this.createdAt = LocalDateTime.now();
 	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-
-	public void setContent(String content) {
-		this.content = content;
-	}
 }
