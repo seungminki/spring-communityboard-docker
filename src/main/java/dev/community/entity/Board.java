@@ -20,7 +20,7 @@ public class Board {
 
 	private String title;
 	private String content;
-	private int reviewCount;
+	private int viewCount;
 	private int likeCount;
 
 	@ManyToOne
@@ -34,7 +34,7 @@ public class Board {
 	public Board(String title, String content, Member member) {
 		this.title = title;
 		this.content = content;
-		this.reviewCount = 0;
+		this.viewCount = 0;
 		this.likeCount = 0;
 		this.member = member;
 		this.createdAt = LocalDateTime.now();
