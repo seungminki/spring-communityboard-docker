@@ -1,6 +1,8 @@
 package dev.community.service;
 
 import dev.community.ErrorMessage;
+import dev.community.dto.CommentRequestDto;
+import dev.community.dto.CommentResponseDto;
 import dev.community.entity.Board;
 import dev.community.entity.Comment;
 import dev.community.entity.Member;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,83 +25,88 @@ public class CommentService {
 	private final MemberRepository memberRepository;
 	private final BoardRepository boardRepository;
 
-	public Comment createComment(String memberEmail, Long boardId, Comment comment) {
-		Member memberEntity = memberRepository.findByEmail(memberEmail)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
-
-		Board persistedBoard = boardRepository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
+	public CommentResponseDto createComment(String memberEmail, Long boardId, CommentRequestDto commentRequestDto) {
+		Member member = validateMemberEmail(memberEmail);
+		Board board = validateBoardId(boardId);
 
 		Comment newComment = Comment.builder()
-			.content(comment.getContent())
-			.member(memberEntity)
-			.board(persistedBoard)
+			.content(commentRequestDto.getContent())
+			.member(member)
+			.board(board)
 			.build();
-		return commentRepository.save(newComment);
+
+		Comment savedComment = commentRepository.save(newComment);
+		return new CommentResponseDto(savedComment);
 	}
 
-	public List<Comment> getComments() {
-		return commentRepository.findAll();
+	public List<CommentResponseDto> getComments() {
+		return commentRepository.findAll().stream()
+			.map(CommentResponseDto::new)
+			.collect(Collectors.toList());
 	}
 
-	public List<Comment> getCommentsByMember(Long memberId) {
-		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
-
-		return commentRepository.findAllByMember(member);
+	public List<CommentResponseDto> getCommentsByMember(String memberEmail) {
+		Member member = validateMemberEmail(memberEmail);
+		return commentRepository.findAllByMember(member).stream()
+			.map(CommentResponseDto::new)
+			.collect(Collectors.toList());
 	}
 
-	public List<Comment> getCommentsByBoard(Long boardId) {
-		Board board = boardRepository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
-
-		return commentRepository.findAllByBoard(board);
+	public List<CommentResponseDto> getCommentsByBoard(Long boardId) {
+		Board board = validateBoardId(boardId);
+		return commentRepository.findAllByBoard(board).stream()
+			.map(CommentResponseDto::new)
+			.collect(Collectors.toList());
 	}
 
-	public List<Comment> getCommentsByMemberAndBoard(Long memberId, Long boardId) {
-		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
-
-		Board board = boardRepository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
-
-		return commentRepository.findAllByMemberAndBoard(member, board);
+	public CommentResponseDto getSingleComment(Long commentId) {
+		Comment comment = validateCommentId(commentId);
+		return new CommentResponseDto(comment);
 	}
 
-	public Comment getSingleComment(Long commentId) {
-		return commentRepository.findById(commentId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_COMMENT_ID.getMessage()));
-	}
-
-	public Comment updateComment(String memberEmail, Long commentId, String newContent) {
-		Member member = memberRepository.findByEmail(memberEmail)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_TOKEN.getMessage()));
-
-		Comment comment = commentRepository.findById(commentId)
-				.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_COMMENT_ID.getMessage()));
+	public CommentResponseDto updateComment(String memberEmail, Long commentId, CommentRequestDto commentRequestDto) {
+		Member member = validateMemberEmail(memberEmail);
+		Comment comment = validateCommentId(commentId);
 
 		if (!comment.getMember().equals(member)) {
 			throw new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage());
 		}
 
-		comment.setContent(newContent);
+		Comment newComment = Comment.builder()
+			.content(commentRequestDto.getContent())
+			.member(comment.getMember())
+			.board(comment.getBoard())
+			.build();
 
-		return commentRepository.save(comment);
+		Comment savedComment = commentRepository.save(newComment);
+
+		return new CommentResponseDto(savedComment);
 	}
 
 	public void deleteComment(String memberEmail, Long commentId) {
-		Member member = memberRepository.findByEmail(memberEmail)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_TOKEN.getMessage()));
-
-		Comment comment = commentRepository.findById(commentId)
-				.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_COMMENT_ID.getMessage()));
-
+		Member member = validateMemberEmail(memberEmail);
+		Comment comment = validateCommentId(commentId);
 
 		if (!comment.getMember().equals(member)) {
 			throw new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage());
 		}
 
 		commentRepository.delete(comment);
+	}
+
+	private Member validateMemberEmail(String memberEmail) {
+		return memberRepository.findByEmail(memberEmail)
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
+	}
+
+	private Board validateBoardId(Long boardId) {
+		return boardRepository.findById(boardId)
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
+	}
+
+	private Comment validateCommentId(Long commentId) {
+		return commentRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_COMMENT_ID.getMessage()));
 	}
 
 }

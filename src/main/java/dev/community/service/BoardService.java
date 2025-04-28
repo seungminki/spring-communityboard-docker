@@ -1,40 +1,57 @@
 package dev.community.service;
 
 import dev.community.ErrorMessage;
+import dev.community.dto.BoardRequestDto;
+import dev.community.dto.BoardResponseDto;
 import dev.community.entity.Member;
+import dev.community.dto.MemberResponseDto;
 import dev.community.repository.BoardRepository;
 import dev.community.entity.Board;
 import dev.community.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class BoardService {
 
+	private final ApplicationContext context;
+
 	private final BoardRepository boardRepository;
 	private final MemberRepository memberRepository;
 
-	public Board createBoard(String memberEmail, Board board) {
-		Member memberEntity = memberRepository.findByEmail(memberEmail)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
+	public BoardResponseDto createBoard(String memberEmail, BoardRequestDto boardRequestDto) {
+		Member member = validateMemberEmail(memberEmail);
 
 		Board newBoard = Board.builder()
-			.title(board.getTitle())
-			.content(board.getContent())
-			.member(memberEntity)
+			.title(boardRequestDto.getTitle())
+			.content(boardRequestDto.getContent())
+			.member(member)
 			.build();
 
-		return boardRepository.save(newBoard);
+		Board savedBoard = boardRepository.save(newBoard);
+
+		return new BoardResponseDto(savedBoard);
 	}
 
-	public List<Board> getBoards() {
-		return boardRepository.findAll();
+	@Transactional(readOnly = true)
+	public List<BoardResponseDto> getBoards() {
+		return boardRepository.findAll().stream()
+			.map(BoardResponseDto::new)
+			.collect(Collectors.toList());
 	}
+
 	@Transactional(readOnly = true)
 	public Page<BoardResponseDto> getBoards(int page, int size, String sortBy, boolean asc) {
 		Sort.Direction direction = asc ? Sort.Direction.ASC : Sort.Direction.DESC;
@@ -59,40 +76,40 @@ public class BoardService {
 
 	}
 
-	public List<Board> getBoardsByMember(Long memberId) {
-		Member memberEntity = memberRepository.findById(memberId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
-
-		return boardRepository.findAllByMember(memberEntity);
+	@Transactional(readOnly = true)
+	public List<BoardResponseDto> getBoardsByMember(String memberEmail) {
+		Member member = validateMemberEmail(memberEmail);
+		return boardRepository.findAllByMember(member).stream()
+			.map(BoardResponseDto::new)
+			.collect(Collectors.toList());
 
 	}
 
-	public Board updateBoard(String memberEmail, Long boardId, String newTitle, String newContent) {
-		Member memberEntity = memberRepository.findByEmail(memberEmail)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
+	public BoardResponseDto updateBoard(String memberEmail, Long boardId, BoardRequestDto boardRequestDto) {
+		Member member = validateMemberEmail(memberEmail);
+		Board board = validateBoardId(boardId);
 
-		Board board = boardRepository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
-
-		if (!board.getMember().getId().equals(memberEntity.getId())) {
-			throw new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage());
+		if (!board.getMember().getId().equals(member.getId())) {
+			throw new IllegalArgumentException("");
 		}
 
-		board.setTitle(newTitle);
-		board.setContent(newContent);
+		Board newBoard = Board.builder()
+			.title(boardRequestDto.getTitle())
+			.content(boardRequestDto.getContent())
+			.member(member)
+			.build();
 
-		return boardRepository.save(board);
+		Board savedBoard = boardRepository.save(newBoard);
+
+		return new BoardResponseDto(savedBoard);
 	}
 
 	public void deleteBoard(String memberEmail, Long boardId) {
-		Member memberEntity = memberRepository.findByEmail(memberEmail)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_TOKEN.getMessage()));
+		Member member = validateMemberEmail(memberEmail);
+		Board board = validateBoardId(boardId);
 
-		Board board = boardRepository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
-
-		if (!board.getMember().getId().equals(memberEntity.getId())) {
-			throw new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage());
+		if (!board.getMember().getId().equals(member.getId())) {
+			throw new IllegalArgumentException("");
 		}
 
 		boardRepository.delete(board);
