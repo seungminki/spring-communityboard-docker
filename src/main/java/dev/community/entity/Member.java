@@ -1,6 +1,7 @@
 package dev.community.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,12 +17,16 @@ public class Member {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(unique = true)
+	@NotBlank
+	@Column(nullable = false, unique = true)
 	private String email;
 
-	@Column(unique = true)
+	@NotBlank
+	@Column(nullable = false, unique = true)
 	private String name;
 
+	@NotBlank
+	@Column(nullable = false)
 	private String password;
 
 	@Builder
