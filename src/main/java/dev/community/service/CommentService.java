@@ -30,7 +30,7 @@ public class CommentService {
 		Board board = validateBoardId(boardId);
 
 		Comment newComment = Comment.builder()
-			.content(commentRequestDto.getContent())
+			.content(commentRequestDto.content())
 			.member(member)
 			.board(board)
 			.build();
@@ -73,7 +73,7 @@ public class CommentService {
 		}
 
 		Comment newComment = Comment.builder()
-			.content(commentRequestDto.getContent())
+			.content(commentRequestDto.content())
 			.member(comment.getMember())
 			.board(comment.getBoard())
 			.build();

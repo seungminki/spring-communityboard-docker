@@ -1,7 +1,7 @@
 package dev.community.service;
 
 import dev.community.ErrorMessage;
-import dev.community.dto.LoginRequestDto;
+import dev.community.dto.LoginResponseDto;
 import dev.community.dto.MemberRequestDto;
 import dev.community.entity.Member;
 import dev.community.dto.MemberResponseDto;
@@ -20,9 +20,9 @@ public class MemberService {
 	public MemberResponseDto join(MemberRequestDto memberRequestDto) {
 		validateDuplicateMember(memberRequestDto);
 		Member newmember = Member.builder()
-			.name(memberRequestDto.getName())
-			.email(memberRequestDto.getEmail())
-			.password(memberRequestDto.getPassword())
+			.name(memberRequestDto.name())
+			.email(memberRequestDto.email())
+			.password(memberRequestDto.password())
 			.build();
 
 		memberRepository.save(newmember);
@@ -30,12 +30,12 @@ public class MemberService {
 		return new MemberResponseDto(newmember);
 	}
 
-	public LoginRequestDto login(String memberEmail, String password) {
+	public LoginResponseDto login(String memberEmail, String password) {
 		Member member = memberRepository.findByEmail(memberEmail)
 			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
 
 		if (member.getPassword().equals(password)) {
-			return new LoginRequestDto(member);
+			return new LoginResponseDto(member.getEmail());
 		} else {
 			throw new IllegalArgumentException(ErrorMessage.NOT_MATCHES_ID_AND_PW.getMessage());
 		}
@@ -64,12 +64,12 @@ public class MemberService {
 	}
 
 	private void validateDuplicateMember(MemberRequestDto memberRequestDto) {
-		memberRepository.findByName(memberRequestDto.getName())
+		memberRepository.findByName(memberRequestDto.name())
 			.ifPresent(m -> {
 				throw new IllegalArgumentException(ErrorMessage.ALREADY_EXITS_MEMBER.getMessage());
 			});
 
-		memberRepository.findByEmail(memberRequestDto.getEmail())
+		memberRepository.findByEmail(memberRequestDto.name())
 			.ifPresent(m -> {
 				throw new IllegalArgumentException(ErrorMessage.ALREADY_EXITS_MEMBER.getMessage());
 			});

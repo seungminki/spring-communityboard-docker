@@ -1,10 +1,9 @@
 package dev.community.service;
 
 import dev.community.ErrorMessage;
-import dev.community.dto.BoardRequestDto;
+import dev.community.dto.CreateBoardRequestDto;
 import dev.community.dto.BoardResponseDto;
 import dev.community.entity.Member;
-import dev.community.dto.MemberResponseDto;
 import dev.community.repository.BoardRepository;
 import dev.community.entity.Board;
 import dev.community.repository.MemberRepository;
@@ -31,12 +30,12 @@ public class BoardService {
 	private final BoardRepository boardRepository;
 	private final MemberRepository memberRepository;
 
-	public BoardResponseDto createBoard(String memberEmail, BoardRequestDto boardRequestDto) {
+	public BoardResponseDto createBoard(String memberEmail, CreateBoardRequestDto createBoardRequestDto) {
 		Member member = validateMemberEmail(memberEmail);
 
 		Board newBoard = Board.builder()
-			.title(boardRequestDto.getTitle())
-			.content(boardRequestDto.getContent())
+			.title(createBoardRequestDto.title())
+			.content(createBoardRequestDto.content())
 			.member(member)
 			.build();
 
@@ -85,7 +84,7 @@ public class BoardService {
 
 	}
 
-	public BoardResponseDto updateBoard(String memberEmail, Long boardId, BoardRequestDto boardRequestDto) {
+	public BoardResponseDto updateBoard(String memberEmail, Long boardId, CreateBoardRequestDto createBoardRequestDto) {
 		Member member = validateMemberEmail(memberEmail);
 		Board board = validateBoardId(boardId);
 
@@ -94,8 +93,8 @@ public class BoardService {
 		}
 
 		Board newBoard = Board.builder()
-			.title(boardRequestDto.getTitle())
-			.content(boardRequestDto.getContent())
+			.title(createBoardRequestDto.title())
+			.content(createBoardRequestDto.content())
 			.member(member)
 			.build();
 
