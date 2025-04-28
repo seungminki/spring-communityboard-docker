@@ -30,13 +30,18 @@ public class Board {
 	@CreatedDate
 	private LocalDateTime createdAt;
 
+	@Version
+	private Long version;
+
 	@Builder
-	public Board(String title, String content, Member member) {
+	public Board(Long id, String title, String content, Member member, int viewCount, Long version) {
+		this.id = id;
 		this.title = title;
 		this.content = content;
-		this.viewCount = 0;
+		this.viewCount = viewCount;
 		this.likeCount = 0;
 		this.member = member;
 		this.createdAt = LocalDateTime.now();
+		this.version = version;
 	}
 }

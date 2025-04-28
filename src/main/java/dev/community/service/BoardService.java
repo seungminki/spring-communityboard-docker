@@ -42,9 +42,21 @@ public class BoardService {
 		return boardRepository.findAll(pageable).map(BoardResponseDto::new);
 	}
 
-	public Board getSingleBoard(Long boardId) {
-		return boardRepository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
+	@Transactional(readOnly = true)
+	public BoardResponseDto getBoardInfo(Long boardId) {
+		Board board = validateBoardId(boardId);
+		return new BoardResponseDto(board);
+	}
+
+	@Transactional(readOnly = true)
+	public BoardResponseDto getSingleBoard(Long boardId) {
+		Board board = validateBoardId(boardId);
+
+		BoardService proxy = context.getBean(BoardService.class);
+		proxy.increaseViewCount(board);
+
+		return new BoardResponseDto(board);
+
 	}
 
 	public List<Board> getBoardsByMember(Long memberId) {
@@ -86,4 +98,28 @@ public class BoardService {
 		boardRepository.delete(board);
 	}
 
+	@Transactional
+	protected void increaseViewCount(Board board) {
+
+		Board newboard = Board.builder()
+			.id(board.getId())
+			.title(board.getTitle())
+			.content(board.getContent())
+			.member(board.getMember())
+			.viewCount(board.getViewCount() + 1)
+			.version(board.getVersion())
+			.build();
+
+		boardRepository.saveAndFlush(newboard);
+	}
+
+	private Member validateMemberEmail(String memberEmail) {
+		return memberRepository.findByEmail(memberEmail)
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
+	}
+
+	private Board validateBoardId(Long boardId) {
+		return boardRepository.findById(boardId)
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
+	}
 }
