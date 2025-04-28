@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 public class MemberResponseDto {
 
 	private Long id;
-	private String username;
+	private String name;
 	private String email;
 
 	@Builder
 	public MemberResponseDto(Member member) {
 		this.id = member.getId();
-		this.username = member.getName();
+		this.name = member.getName();
 		this.email = member.getEmail();
 	}
 
