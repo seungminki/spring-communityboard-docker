@@ -9,20 +9,16 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberRequestDto {
+public class LoginRequestDto {
 
-	@NotBlank(message = "닉네임은 필수입니다.")
-	private String name;
-
-	@NotBlank(message = "이메일은 필수입니다.")
+	@NotBlank(message = "회원 이메일 입력은 필수입니다.")
 	private String email;
 
-	@NotBlank(message = "비밀번호는 필수입니다.")
+	@NotBlank(message = "회원 비밀번호 입력은 필수입니다.")
 	private String password;
 
 	@Builder
-	public MemberRequestDto(Member member) {
-		this.name = member.getName();
+	public LoginRequestDto(Member member) {
 		this.email = member.getEmail();
 		this.password = member.getPassword();
 	}
