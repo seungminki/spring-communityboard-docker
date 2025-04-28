@@ -35,6 +35,12 @@ public class BoardService {
 	public List<Board> getBoards() {
 		return boardRepository.findAll();
 	}
+	@Transactional(readOnly = true)
+	public Page<BoardResponseDto> getBoards(int page, int size, String sortBy, boolean asc) {
+		Sort.Direction direction = asc ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+		return boardRepository.findAll(pageable).map(BoardResponseDto::new);
+	}
 
 	public Board getSingleBoard(Long boardId) {
 		return boardRepository.findById(boardId)

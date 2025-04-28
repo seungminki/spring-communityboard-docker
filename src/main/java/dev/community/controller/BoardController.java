@@ -20,6 +20,14 @@ public class BoardController {
 	List<Board> allBoards() {
 		return boardService.getBoards();
 	}
+	@GetMapping("")
+	Page<BoardResponseDto> getBoardList(
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int size,
+		@RequestParam(defaultValue = "createdAt") String sortBy,
+		@RequestParam(defaultValue = "false") boolean asc) {
+		return boardService.getBoards(page, size, sortBy, asc);
+	}
 
 	@GetMapping("/all/bymember")
 	List<Board> allBoardsByMember(@RequestBody Member member) {
