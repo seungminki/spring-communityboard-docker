@@ -1,6 +1,6 @@
 package dev.community.controller;
 
-import dev.community.dto.BoardRequestDto;
+import dev.community.dto.CreateBoardRequestDto;
 import dev.community.dto.BoardResponseDto;
 import dev.community.dto.MemberRequestDto;
 import dev.community.service.BoardService;
@@ -21,7 +21,7 @@ public class BoardController {
 	private final BoardService boardService;
 
 	@Operation(description = "모든 게시글 조회")
-	@GetMapping("")
+	@GetMapping("/all")
 	List<BoardResponseDto> allBoards() {
 		return boardService.getBoards();
 	}
@@ -37,9 +37,9 @@ public class BoardController {
 	}
 
 	@Operation(description = "특정 멤버가 쓴 게시글 조회")
-	@GetMapping("")
+	@GetMapping("/member")
 	List<BoardResponseDto> allBoardsByMember(@RequestBody @Valid MemberRequestDto memberRequestDto) {
-		return boardService.getBoardsByMember(memberRequestDto.getEmail());
+		return boardService.getBoardsByMember(memberRequestDto.email());
 	}
 
 	@Operation(description = "1개의 게시글 조회")
@@ -50,14 +50,14 @@ public class BoardController {
 
 	@Operation(description = "게시글 생성")
 	@PostMapping("")
-	BoardResponseDto newBoard(Principal principal, @RequestBody @Valid BoardRequestDto boardRequestDto) {
-		return boardService.createBoard(principal.getName(), boardRequestDto);
+	BoardResponseDto newBoard(Principal principal, @RequestBody @Valid CreateBoardRequestDto createBoardRequestDto) {
+		return boardService.createBoard(principal.getName(), createBoardRequestDto);
 	}
 
 	@Operation(description = "게시글 수정")
 	@PutMapping("/{id}")
-	BoardResponseDto updateBoard(Principal principal, @PathVariable Long id, @RequestBody @Valid BoardRequestDto boardRequestDto) {
-		return boardService.updateBoard(principal.getName(), id, boardRequestDto);
+	BoardResponseDto updateBoard(Principal principal, @PathVariable Long id, @RequestBody @Valid CreateBoardRequestDto createBoardRequestDto) {
+		return boardService.updateBoard(principal.getName(), id, createBoardRequestDto);
 	}
 
 	@Operation(description = "게시글 삭제")

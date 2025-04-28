@@ -1,6 +1,7 @@
 package dev.community.controller;
 
 import dev.community.dto.LoginRequestDto;
+import dev.community.dto.LoginResponseDto;
 import dev.community.dto.MemberRequestDto;
 import dev.community.dto.MemberResponseDto;
 import dev.community.service.MemberService;
@@ -29,8 +30,8 @@ class MemberController {
 	@Operation(description = "멤버 로그인")
 	@PostMapping("/login")
 	public String login(@RequestBody @Valid LoginRequestDto req) {
-		LoginRequestDto member = memberService.login(req.getEmail(), req.getPassword());
-		return jwtUtil.createJwt(member.getEmail()); // 이메일 기준으로 토큰 발행
+		LoginResponseDto member = memberService.login(req.email(), req.password());
+		return jwtUtil.createJwt(member.email());
 	}
 
 //	@Operation(description = "멤버 로그아웃")
@@ -42,7 +43,7 @@ class MemberController {
 	@Operation(description = "멤버 정보 수정")
 	@PutMapping("/{id}")
 	MemberResponseDto updateMember(Principal principal, @RequestBody @Valid MemberRequestDto MemberRequestDto) {
-		return memberService.updateName(principal.getName(), MemberRequestDto.getName());
+		return memberService.updateName(principal.getName(), MemberRequestDto.name());
 	}
 
 	@Operation(description = "멤버 삭제")

@@ -1,9 +1,6 @@
 package dev.community.controller;
 
-import dev.community.dto.BoardRequestDto;
-import dev.community.dto.CommentRequestDto;
-import dev.community.dto.CommentResponseDto;
-import dev.community.dto.MemberRequestDto;
+import dev.community.dto.*;
 import dev.community.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -21,21 +18,21 @@ class CommentController {
 	private final CommentService commentService;
 
 	@Operation(description = "모든 댓글 조회")
-	@GetMapping("")
+	@GetMapping("/all")
 	List<CommentResponseDto> allComments() {
 		return commentService.getComments();
 	}
 
 	@Operation(description = "특정 멤버가 쓴 게시글 조회")
-	@GetMapping("")
+	@GetMapping("/member")
 	List<CommentResponseDto> allCommentsByMember(@RequestBody MemberRequestDto memberRequestDto) {
-		return commentService.getCommentsByMember(memberRequestDto.getEmail());
+		return commentService.getCommentsByMember(memberRequestDto.email());
 	}
 
 	@Operation(description = "특정 게시글에 달린 댓글 조회")
-	@GetMapping("")
-	List<CommentResponseDto> allCommentsByBoard(@RequestBody BoardRequestDto boardRequestDto) {
-		return commentService.getCommentsByBoard(boardRequestDto.getId());
+	@GetMapping("/board")
+	List<CommentResponseDto> allCommentsByBoard(@RequestBody BoardIdRequestDto boardIdRequestDto) {
+		return commentService.getCommentsByBoard(boardIdRequestDto.id());
 	}
 
 	@Operation(description = "1개의 댓글 조회")
@@ -46,8 +43,8 @@ class CommentController {
 
 	@Operation(description = "댓글 생성")
 	@PostMapping("")
-	CommentResponseDto newComment(Principal principal, @RequestBody @Valid BoardRequestDto boardRequestDto, CommentRequestDto commentRequestDto) {
-		return commentService.createComment(principal.getName(), boardRequestDto.getId(), commentRequestDto);
+	CommentResponseDto newComment(Principal principal, @RequestBody @Valid BoardIdRequestDto boardIdRequestDto, CommentRequestDto commentRequestDto) {
+		return commentService.createComment(principal.getName(), boardIdRequestDto.id(), commentRequestDto);
 	}
 
 	@Operation(description = "댓글 수정")
