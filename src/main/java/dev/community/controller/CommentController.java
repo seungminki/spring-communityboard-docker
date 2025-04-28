@@ -1,10 +1,12 @@
 package dev.community.controller;
 
-import dev.community.entity.Board;
-import dev.community.entity.Member;
+import dev.community.dto.BoardRequestDto;
+import dev.community.dto.CommentRequestDto;
+import dev.community.dto.CommentResponseDto;
+import dev.community.dto.MemberRequestDto;
 import dev.community.service.CommentService;
-import dev.community.entity.Comment;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,44 +22,38 @@ class CommentController {
 
 	@Operation(description = "모든 댓글 조회")
 	@GetMapping("")
-	List<Comment> allComments() {
+	List<CommentResponseDto> allComments() {
 		return commentService.getComments();
 	}
 
 	@Operation(description = "특정 멤버가 쓴 게시글 조회")
 	@GetMapping("")
-	List<Comment> allCommentsByMember(@RequestBody Member member) {
-		return commentService.getCommentsByMember(member.getId());
+	List<CommentResponseDto> allCommentsByMember(@RequestBody MemberRequestDto memberRequestDto) {
+		return commentService.getCommentsByMember(memberRequestDto.getEmail());
 	}
 
 	@Operation(description = "특정 게시글에 달린 댓글 조회")
 	@GetMapping("")
-	List<Comment> allCommentsByBoard(@RequestBody Board board) {
-		return commentService.getCommentsByBoard(board.getId());
+	List<CommentResponseDto> allCommentsByBoard(@RequestBody BoardRequestDto boardRequestDto) {
+		return commentService.getCommentsByBoard(boardRequestDto.getId());
 	}
-
-//	@Operation(description = "특정 멤버, 특정 게시글 조회")
-//	@GetMapping("/all/bymemberandboard")
-//	List<Comment> allCommentsByMemberAndBoard(@RequestBody Member member, Board board) {
-//		return commentService.getCommentsByMemberAndBoard(member.getId(), board.getId());
-//	}
 
 	@Operation(description = "1개의 댓글 조회")
 	@GetMapping("/{id}")
-	Comment getComment(@PathVariable Long id) {
+	CommentResponseDto getComment(@PathVariable Long id) {
 		return commentService.getSingleComment(id);
 	}
 
 	@Operation(description = "댓글 생성")
 	@PostMapping("")
-	Comment newComment(Principal principal, @RequestBody Board board, Comment comment) {
-		return commentService.createComment(principal.getName(), board.getId(), comment);
+	CommentResponseDto newComment(Principal principal, @RequestBody @Valid BoardRequestDto boardRequestDto, CommentRequestDto commentRequestDto) {
+		return commentService.createComment(principal.getName(), boardRequestDto.getId(), commentRequestDto);
 	}
 
 	@Operation(description = "댓글 수정")
 	@PutMapping("/{id}")
-	Comment updateComment(Principal principal,  @PathVariable Long id, @RequestBody Comment newComment) {
-		return commentService.updateComment(principal.getName(), id, newComment.getContent());
+	CommentResponseDto updateComment(Principal principal,  @PathVariable Long id, @RequestBody @Valid CommentRequestDto commentRequestDto) {
+		return commentService.updateComment(principal.getName(), id, commentRequestDto);
 	}
 
 	@Operation(description = "댓글 삭제")

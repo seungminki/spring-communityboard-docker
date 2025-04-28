@@ -22,13 +22,13 @@ class MemberController {
 
 	@Operation(description = "멤버 생성")
 	@PostMapping("")
-	MemberRequestDto newMember(@RequestBody @Valid MemberRequestDto memberRequestDto) {
+	MemberResponseDto newMember(@RequestBody @Valid MemberRequestDto memberRequestDto) {
 		return memberService.join(memberRequestDto);
 	}
 
 	@Operation(description = "멤버 로그인")
 	@PostMapping("/login")
-	public String login(@RequestBody LoginRequestDto req) {
+	public String login(@RequestBody @Valid LoginRequestDto req) {
 		LoginRequestDto member = memberService.login(req.getEmail(), req.getPassword());
 		return jwtUtil.createJwt(member.getEmail()); // 이메일 기준으로 토큰 발행
 	}
@@ -41,8 +41,8 @@ class MemberController {
 
 	@Operation(description = "멤버 정보 수정")
 	@PutMapping("/{id}")
-	MemberResponseDto updateMember(Principal principal, @RequestBody MemberRequestDto MemberRequestDto) {
-		return memberService.updateName(principal.getName(), MemberRequestDto.getUsername());
+	MemberResponseDto updateMember(Principal principal, @RequestBody @Valid MemberRequestDto MemberRequestDto) {
+		return memberService.updateName(principal.getName(), MemberRequestDto.getName());
 	}
 
 	@Operation(description = "멤버 삭제")
