@@ -25,7 +25,7 @@ class CommentController {
 
 	@Operation(description = "특정 멤버가 쓴 게시글 조회")
 	@GetMapping("/member")
-	List<CommentResponseDto> allCommentsByMember(@RequestBody MemberRequestDto memberRequestDto) {
+	List<CommentResponseDto> allCommentsByMember(@RequestBody MemberEmailRequestDto memberRequestDto) {
 		return commentService.getCommentsByMember(memberRequestDto.email());
 	}
 

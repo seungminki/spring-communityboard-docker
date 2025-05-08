@@ -17,6 +17,7 @@ public class SecurityConfig {
 
 	private final JwtUtil jwtUtil;
 
+	// production용 함수
 //	@Bean
 //	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //		http
@@ -31,6 +32,7 @@ public class SecurityConfig {
 //		return http.build();
 //	}
 
+	// dev용 함수
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http

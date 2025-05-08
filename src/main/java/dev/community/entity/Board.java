@@ -21,7 +21,6 @@ public class Board {
 	private String title;
 	private String content;
 	private int viewCount;
-	private int likeCount;
 
 	@ManyToOne
 	@JoinColumn(name = "member_id")
@@ -39,7 +38,6 @@ public class Board {
 		this.title = title;
 		this.content = content;
 		this.viewCount = viewCount;
-		this.likeCount = 0;
 		this.member = member;
 		this.createdAt = LocalDateTime.now();
 		this.version = version;
