@@ -1,5 +1,8 @@
 package dev.community;
 
+import lombok.Getter;
+
+@Getter
 public enum ErrorMessage {
 	INVALID_BOARD_ID("해당 글이 존재하지 않습니다."),
 	INVALID_MEMBER_ID("해당 멤버가 존재하지 않습니다."),
@@ -24,10 +27,6 @@ public enum ErrorMessage {
 
 	ErrorMessage(String message) {
 		this.message = message;
-	}
-
-	public String getMessage() {
-		return message;
 	}
 
 	public String format(Object... args) {

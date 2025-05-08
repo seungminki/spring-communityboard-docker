@@ -18,7 +18,6 @@ import java.util.List;
 public class LikeController {
 
 	private final LikeService likeService;
-	private final BoardService boardService;
 
 	@Operation(description = "특정 멤버가 좋아요 누른 글 목록 ")
 	@GetMapping("/member")
