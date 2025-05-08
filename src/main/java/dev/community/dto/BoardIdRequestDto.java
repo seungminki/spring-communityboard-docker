@@ -1,7 +1,7 @@
 package dev.community.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record BoardIdRequestDto (
-	@NotBlank(message = "글 번호는 필수입니다.") Long id
+	@NotNull(message = "글 번호는 필수입니다.") Long id
 ){ }
