@@ -2,7 +2,7 @@ package dev.community.controller;
 
 import dev.community.dto.CreateBoardRequestDto;
 import dev.community.dto.BoardResponseDto;
-import dev.community.dto.MemberRequestDto;
+import dev.community.dto.MemberEmailRequestDto;
 import dev.community.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -38,7 +38,7 @@ public class BoardController {
 
 	@Operation(description = "특정 멤버가 쓴 게시글 조회")
 	@GetMapping("/member")
-	List<BoardResponseDto> allBoardsByMember(@RequestBody @Valid MemberRequestDto memberRequestDto) {
+	List<BoardResponseDto> allBoardsByMember(@RequestBody @Valid MemberEmailRequestDto memberRequestDto) {
 		return boardService.getBoardsByMember(memberRequestDto.email());
 	}
 
