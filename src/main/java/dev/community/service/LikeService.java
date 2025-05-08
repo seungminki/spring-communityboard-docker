@@ -1,6 +1,7 @@
 package dev.community.service;
 
 import dev.community.ErrorMessage;
+import dev.community.dto.LikeResponseDto;
 import dev.community.entity.Like;
 import dev.community.entity.Member;
 import dev.community.repository.BoardRepository;
@@ -8,10 +9,15 @@ import dev.community.entity.Board;
 import dev.community.repository.LikeRepository;
 import dev.community.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Service
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Slf4j
 @RequiredArgsConstructor
+@Service
 public class LikeService {
 
 	private final LikeRepository likeRepository;
@@ -19,40 +25,52 @@ public class LikeService {
 	private final BoardRepository boardRepository;
 
 
-	public Like createLike(String memberName, Long boardId) {
-		Member member = memberRepository.findByName(memberName)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
-		Board board = boardRepository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
+	public LikeResponseDto createLike(String memberEmail, Long boardId) {
+		Member member = validateMemberEmail(memberEmail);
+		Board board = validateBoardId(boardId);
 
-		Like like = Like.builder()
+		Like newLike = Like.builder()
 			.member(member)
 			.board(board)
 			.build();
 
-		return likeRepository.save(like);
+		Like savedLike = likeRepository.save(newLike);
+
+		return new LikeResponseDto(savedLike);
 	}
 
+	public void deleteLike(String memberEmail, Long boardId) {
+		Member member = validateMemberEmail(memberEmail);
+		Board board = validateBoardId(boardId);
 
-
-	public void deleteLike(String memberName, Long boardId) {
-		Member member = memberRepository.findByName(memberName)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
-		Board board = boardRepository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
-
-		Like like = likeRepository.findByMemberAndBoard(member, board)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
-		// TODO: 좋아요를 누른 적이 없습니다
+		Like like = likeRepository.find(member, board)
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_LIKED_ID.getMessage()));
 
 		likeRepository.delete(like);
 	}
 
-	public long countLikes(Long boardId) {
-		Board board = boardRepository.findById(boardId)
-			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
+	public long countLikesByBoard(Long boardId) {
+		Board board = validateBoardId(boardId);
 
 		return likeRepository.countByBoard(board);
+	}
+
+	public List<LikeResponseDto> getMemberLikes(String memberEmail) {
+		Member member = validateMemberEmail(memberEmail);
+
+		return likeRepository.findAllByMember(member).stream()
+			.map(LikeResponseDto::new)
+			.collect(Collectors.toList());
+	}
+
+	private Member validateMemberEmail(String memberEmail) {
+		return memberRepository.findByEmail(memberEmail)
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MEMBER_ID.getMessage()));
+	}
+
+	private Board validateBoardId(Long boardId) {
+		return boardRepository.findById(boardId)
+			.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
 	}
 }
 
