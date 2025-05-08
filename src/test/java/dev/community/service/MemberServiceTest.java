@@ -2,7 +2,7 @@ package dev.community.service;
 
 import dev.community.ErrorMessage;
 import dev.community.dto.LoginResponseDto;
-import dev.community.dto.MemberRequestDto;
+import dev.community.dto.CreateMemberRequestDto;
 import dev.community.dto.MemberResponseDto;
 import dev.community.entity.Member;
 import dev.community.repository.MemberRepository;
@@ -29,7 +29,7 @@ class MemberServiceTest {
 	@Test
 	void 회원가입_성공() {
 		// given
-		MemberRequestDto requestDto = new MemberRequestDto("name", "email@example.com", "password");
+		CreateMemberRequestDto requestDto = new CreateMemberRequestDto("name", "email@example.com", "password");
 
 		// when
 		memberService.join(requestDto);
@@ -116,7 +116,7 @@ class MemberServiceTest {
 		when(memberRepository.findByName("name")).thenReturn(Optional.of(mock(Member.class)));
 
 		// then
-		assertThatThrownBy(() -> memberService.join(new MemberRequestDto("name", "email@example.com", "password")))
+		assertThatThrownBy(() -> memberService.join(new CreateMemberRequestDto("name", "email@example.com", "password")))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessageContaining(ErrorMessage.ALREADY_EXITS_MEMBER.getMessage());
 	}

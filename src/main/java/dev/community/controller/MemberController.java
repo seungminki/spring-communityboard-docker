@@ -2,7 +2,7 @@ package dev.community.controller;
 
 import dev.community.dto.LoginRequestDto;
 import dev.community.dto.LoginResponseDto;
-import dev.community.dto.MemberRequestDto;
+import dev.community.dto.CreateMemberRequestDto;
 import dev.community.dto.MemberResponseDto;
 import dev.community.service.MemberService;
 import dev.community.util.JwtUtil;
@@ -23,7 +23,7 @@ class MemberController {
 
 	@Operation(description = "멤버 생성")
 	@PostMapping("")
-	MemberResponseDto newMember(@RequestBody @Valid MemberRequestDto memberRequestDto) {
+	MemberResponseDto newMember(@RequestBody @Valid CreateMemberRequestDto memberRequestDto) {
 		return memberService.join(memberRequestDto);
 	}
 
@@ -42,7 +42,7 @@ class MemberController {
 
 	@Operation(description = "멤버 정보 수정")
 	@PutMapping("/{id}")
-	MemberResponseDto updateMember(Principal principal, @RequestBody @Valid MemberRequestDto MemberRequestDto) {
+	MemberResponseDto updateMember(Principal principal, @RequestBody @Valid CreateMemberRequestDto MemberRequestDto) {
 		return memberService.updateName(principal.getName(), MemberRequestDto.name());
 	}
 

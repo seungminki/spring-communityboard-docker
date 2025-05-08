@@ -2,7 +2,7 @@ package dev.community.service;
 
 import dev.community.ErrorMessage;
 import dev.community.dto.LoginResponseDto;
-import dev.community.dto.MemberRequestDto;
+import dev.community.dto.CreateMemberRequestDto;
 import dev.community.entity.Member;
 import dev.community.dto.MemberResponseDto;
 import dev.community.repository.MemberRepository;
@@ -17,7 +17,7 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 
-	public MemberResponseDto join(MemberRequestDto memberRequestDto) {
+	public MemberResponseDto join(CreateMemberRequestDto memberRequestDto) {
 		validateDuplicateMember(memberRequestDto);
 		Member newmember = Member.builder()
 			.name(memberRequestDto.name())
@@ -63,7 +63,7 @@ public class MemberService {
 		memberRepository.delete(member);
 	}
 
-	private void validateDuplicateMember(MemberRequestDto memberRequestDto) {
+	private void validateDuplicateMember(CreateMemberRequestDto memberRequestDto) {
 		memberRepository.findByName(memberRequestDto.name())
 			.ifPresent(m -> {
 				throw new IllegalArgumentException(ErrorMessage.ALREADY_EXITS_MEMBER.getMessage());
