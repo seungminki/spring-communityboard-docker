@@ -1,8 +1,8 @@
 package dev.community.service;
 
 import dev.community.ErrorMessage;
-import dev.community.dto.CommentRequestDto;
-import dev.community.dto.CommentResponseDto;
+import dev.community.dto.comment.CommentRequestDto;
+import dev.community.dto.comment.CommentResponseDto;
 import dev.community.entity.Board;
 import dev.community.entity.Comment;
 import dev.community.entity.Member;

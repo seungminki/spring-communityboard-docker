@@ -1,5 +1,6 @@
-package dev.community.dto;
+package dev.community.dto.board;
 
+import dev.community.dto.member.MemberResponseDto;
 import dev.community.entity.Board;
 import lombok.AccessLevel;
 import lombok.Builder;

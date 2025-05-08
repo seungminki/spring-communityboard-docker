@@ -1,4 +1,4 @@
-package dev.community.dto;
+package dev.community.dto.member;
 
 import jakarta.validation.constraints.NotBlank;
 

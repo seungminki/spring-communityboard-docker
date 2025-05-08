@@ -1,4 +1,4 @@
-package dev.community.dto;
+package dev.community.dto.member;
 
 import dev.community.entity.Member;
 import lombok.AccessLevel;

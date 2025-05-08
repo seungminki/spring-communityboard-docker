@@ -1,6 +1,9 @@
 package dev.community.controller;
 
-import dev.community.dto.*;
+import dev.community.dto.board.BoardIdRequestDto;
+import dev.community.dto.comment.CommentRequestDto;
+import dev.community.dto.comment.CommentResponseDto;
+import dev.community.dto.member.MemberEmailRequestDto;
 import dev.community.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

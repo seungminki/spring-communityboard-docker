@@ -1,8 +1,8 @@
 package dev.community.controller;
 
-import dev.community.dto.CreateBoardRequestDto;
-import dev.community.dto.BoardResponseDto;
-import dev.community.dto.MemberEmailRequestDto;
+import dev.community.dto.board.CreateBoardRequestDto;
+import dev.community.dto.board.BoardResponseDto;
+import dev.community.dto.member.MemberEmailRequestDto;
 import dev.community.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

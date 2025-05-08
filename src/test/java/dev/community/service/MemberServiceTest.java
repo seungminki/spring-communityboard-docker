@@ -1,9 +1,9 @@
 package dev.community.service;
 
 import dev.community.ErrorMessage;
-import dev.community.dto.LoginResponseDto;
-import dev.community.dto.CreateMemberRequestDto;
-import dev.community.dto.MemberResponseDto;
+import dev.community.dto.member.LoginResponseDto;
+import dev.community.dto.member.CreateMemberRequestDto;
+import dev.community.dto.member.MemberResponseDto;
 import dev.community.entity.Member;
 import dev.community.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;

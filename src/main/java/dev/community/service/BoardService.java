@@ -1,8 +1,8 @@
 package dev.community.service;
 
 import dev.community.ErrorMessage;
-import dev.community.dto.CreateBoardRequestDto;
-import dev.community.dto.BoardResponseDto;
+import dev.community.dto.board.CreateBoardRequestDto;
+import dev.community.dto.board.BoardResponseDto;
 import dev.community.entity.Member;
 import dev.community.repository.BoardRepository;
 import dev.community.entity.Board;

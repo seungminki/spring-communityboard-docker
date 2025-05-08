@@ -1,7 +1,8 @@
 package dev.community.controller;
 
-import dev.community.dto.*;
-import dev.community.service.BoardService;
+import dev.community.dto.board.BoardIdRequestDto;
+import dev.community.dto.like.LikeResponseDto;
+import dev.community.dto.member.MemberEmailRequestDto;
 import dev.community.service.LikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

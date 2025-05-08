@@ -1,7 +1,7 @@
 package dev.community.service;
 
 import dev.community.ErrorMessage;
-import dev.community.dto.LikeResponseDto;
+import dev.community.dto.like.LikeResponseDto;
 import dev.community.entity.Like;
 import dev.community.entity.Member;
 import dev.community.repository.BoardRepository;

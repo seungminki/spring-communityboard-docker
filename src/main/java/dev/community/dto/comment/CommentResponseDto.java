@@ -1,5 +1,7 @@
-package dev.community.dto;
+package dev.community.dto.comment;
 
+import dev.community.dto.member.MemberResponseDto;
+import dev.community.dto.board.BoardResponseDto;
 import dev.community.entity.Comment;
 import lombok.AccessLevel;
 import lombok.Builder;

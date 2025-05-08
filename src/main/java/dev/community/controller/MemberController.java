@@ -1,9 +1,9 @@
 package dev.community.controller;
 
-import dev.community.dto.LoginRequestDto;
-import dev.community.dto.LoginResponseDto;
-import dev.community.dto.CreateMemberRequestDto;
-import dev.community.dto.MemberResponseDto;
+import dev.community.dto.member.LoginRequestDto;
+import dev.community.dto.member.LoginResponseDto;
+import dev.community.dto.member.CreateMemberRequestDto;
+import dev.community.dto.member.MemberResponseDto;
 import dev.community.service.MemberService;
 import dev.community.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
