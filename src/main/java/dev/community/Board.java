@@ -6,9 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Entity
 public class Board extends BaseEntity {
 
 	@Column(nullable = false)
@@ -19,7 +19,7 @@ public class Board extends BaseEntity {
 
 
 	@Builder
-	public Board(Long id, String title, String content) {
+	public Board(String title, String content) {
 		this.title = title;
 		this.content = content;
 	}
