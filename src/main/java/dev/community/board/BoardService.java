@@ -1,5 +1,6 @@
-package dev.community;
+package dev.community.board;
 
+import dev.community.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +12,12 @@ public class BoardService {
 
 	private final BoardRepository boardRepository;
 
-	public Board getBoardById(Long id) {
-		return boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
-	}
-
 	public List<Board> getAllBoards() {
 		return boardRepository.findAll();
+	}
+
+	public Board getBoardById(Long id) {
+		return boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
 	}
 
 	public Board saveBoard(BoardCreateRequestDto board) {

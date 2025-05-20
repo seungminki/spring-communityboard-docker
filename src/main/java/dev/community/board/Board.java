@@ -1,6 +1,8 @@
-package dev.community;
+package dev.community.board;
 
-import jakarta.persistence.*;
+import dev.community.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
