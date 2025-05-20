@@ -1,5 +1,6 @@
-package dev.community;
+package dev.community.board;
 
+import dev.community.BoardResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +14,14 @@ public class BoardController {
 
 	private final BoardService boardService;
 
-	@GetMapping("")
+	@GetMapping
 	public List<Board> getBoards() {
 		return boardService.getAllBoards();
+	}
+
+	@PostMapping
+	public void createBoard(@RequestBody @Valid BoardCreateRequestDto board) {
+		boardService.saveBoard(board);
 	}
 
 	@GetMapping("/{id}")
@@ -23,9 +29,12 @@ public class BoardController {
 		return boardService.getBoardById(id);
 	}
 
-	@PostMapping("")
-	public Board createBoard(@RequestBody @Valid BoardCreateRequestDto board) {
-		return boardService.saveBoard(board);
+	@PutMapping("/{id}")
+	public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody @Valid BoardCreateRequestDto board) {
+		return null;
 	}
 
+	@DeleteMapping("/{id}")
+	public void deleteBoard(@PathVariable Long id) {	}
 }
+

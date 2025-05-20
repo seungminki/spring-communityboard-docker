@@ -1,4 +1,4 @@
-package dev.community;
+package dev.community.board;
 
 import jakarta.validation.constraints.NotNull;
 
