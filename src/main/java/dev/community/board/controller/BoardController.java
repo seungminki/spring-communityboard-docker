@@ -1,6 +1,8 @@
-package dev.community.board;
+package dev.community.board.controller;
 
 import dev.community.BoardResponseDto;
+import dev.community.board.entity.Board;
+import dev.community.board.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
