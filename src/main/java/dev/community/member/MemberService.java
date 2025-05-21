@@ -1,5 +1,6 @@
 package dev.community.member;
 
+import dev.community.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

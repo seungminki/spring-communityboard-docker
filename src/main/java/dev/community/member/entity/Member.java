@@ -1,4 +1,4 @@
-package dev.community.member;
+package dev.community.member.entity;
 
 import dev.community.BaseEntity;
 import jakarta.persistence.Column;
