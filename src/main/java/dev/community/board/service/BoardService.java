@@ -1,6 +1,8 @@
-package dev.community.board;
+package dev.community.board.service;
 
-import dev.community.ErrorMessage;
+import dev.community.board.controller.BoardCreateRequestDto;
+import dev.community.board.entity.Board;
+import dev.community.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
