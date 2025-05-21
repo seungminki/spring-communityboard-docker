@@ -1,5 +1,7 @@
-package dev.community.member;
+package dev.community.member.controller;
 
+import dev.community.member.entity.Member;
+import dev.community.member.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
