@@ -1,6 +1,6 @@
 package dev.community.board.entity;
 
-import dev.community.BaseEntity;
+import dev.community.BaseTimeEntity;
 import dev.community.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -12,7 +12,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "board")
 @Entity
-public class Board extends BaseEntity {
+public class Board extends BaseTimeEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(nullable = false)
 	private String title;
