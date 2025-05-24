@@ -26,12 +26,12 @@ public class Board extends BaseTimeEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", nullable = false)
-	private Member author;
+	private Member member;
 
 	@Builder
-	public Board(String title, String content, Member author) {
+	public Board(String title, String content, Member member) {
 		this.title = title;
 		this.content = content;
-		this.author = author;
+		this.member = member;
 	}
 }
