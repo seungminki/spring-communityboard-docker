@@ -1,42 +1,47 @@
 package dev.community.member.controller;
 
-import dev.community.member.entity.Member;
-import dev.community.member.MemberService;
+import dev.community.member.controller.dto.MemberCreateRequest;
+import dev.community.member.controller.dto.MemberLoginRequest;
+import dev.community.member.controller.dto.MemberUpdateRequest;
+import dev.community.member.service.MemberCommandService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.security.Principal;
+
 
 @RequiredArgsConstructor
 @RequestMapping("/members")
 @RestController
 public class MemberController {
 
-	private final MemberService memberService;
-
-	@GetMapping
-	public List<Member> getMembers() {
-		return memberService.getMembers();
-	}
+	private final MemberCommandService memberCommandService;
 
 	@PostMapping
-	public Member createMember(@RequestBody @Valid Member member) {
-		return member;
+	public Long createMember(@RequestBody @Valid MemberCreateRequest request) {
+		return memberCommandService.create(request);
 	}
 
-	@GetMapping("/{id}")
-	public Member getMember(@PathVariable Long id) {
-		return null;
+
+	@PutMapping
+	public Long updateMember(Principal principal, @RequestBody @Valid MemberUpdateRequest request) {
+		return memberCommandService.update(principal, request);
 	}
 
-	@PutMapping("/{id}")
-	public Member updateMember(@PathVariable Long id, @RequestBody Member member) {
-		return null;
-	}
-
-	@DeleteMapping("/{id}")
-	public void deleteMember(@PathVariable Long id) {
+	@DeleteMapping
+	public void deleteMember(Principal principal) {
+		memberCommandService.delete(principal);
 
 	}
+
+	@PostMapping("/login")
+	public String loginMember(@RequestBody @Valid MemberLoginRequest request) {
+		return memberCommandService.login(request);
+	}
+
+	@PostMapping("/logout")
+	public void logoutMember(Principal principal) {
+	}
+
 }
