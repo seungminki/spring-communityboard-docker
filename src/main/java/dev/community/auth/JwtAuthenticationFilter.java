@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,15 +19,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final JwtUtil jwtUtil;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request,
-									HttpServletResponse response,
-									FilterChain filterChain)
+	protected void doFilterInternal(@NonNull HttpServletRequest request,
+									@NonNull HttpServletResponse response,
+									@NonNull FilterChain filterChain)
 		throws ServletException, IOException {
 
-		String authHeader = request.getHeader("Authorization");
+		String authHeader = request.getHeader(TokenType.AUTHORIZATION_HEADER.getValue());
 
-		if (authHeader != null && authHeader.startsWith("Bearer ")) {
-			String token = authHeader.substring(7);
+		if (authHeader != null && authHeader.startsWith(TokenType.BEARER_PREFIX.getValue())) {
+			String token = authHeader.substring(Integer.parseInt(TokenType.BEARER_PREFIX_LEN.getValue()));
 			String userEmail = jwtUtil.validateJwt(token);
 
 			if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {

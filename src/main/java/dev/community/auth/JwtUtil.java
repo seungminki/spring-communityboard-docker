@@ -1,5 +1,6 @@
  package dev.community.auth;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -12,23 +13,26 @@ import java.util.Date;
 public class JwtUtil {
 
 	private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-	private final long EXPIRATION_TIME = 1000 * 60 * 60;
 
 	public String createJwt(String memberEmail) {
 		return Jwts.builder()
 			.setSubject(memberEmail)
 			.setIssuedAt(new Date())
-			.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-			.signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+			.setExpiration(new Date(System.currentTimeMillis() + TokenExpiration.ACCESS_TOKEN.getExpirationTime()))
+			.signWith(SECRET_KEY, SignatureAlgorithm.HS256)
 			.compact();
 	}
 
 	public String validateJwt(String token) {
 		try {
-			return Jwts.parser().setSigningKey(SECRET_KEY)
+			return Jwts.parserBuilder()
+				.setSigningKey(SECRET_KEY)
+				.build()
 				.parseClaimsJws(token)
-				.getBody().getSubject();
-		} catch (Exception e) {
+				.getBody()
+				.getSubject();
+		} catch (JwtException | IllegalArgumentException e) {
+			// 유효하지 않은 토큰
 			return null;
 		}
 	}
