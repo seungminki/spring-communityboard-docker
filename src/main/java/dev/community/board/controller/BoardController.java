@@ -1,12 +1,15 @@
 package dev.community.board.controller;
 
-import dev.community.BoardResponseDto;
-import dev.community.board.entity.Board;
-import dev.community.board.service.BoardService;
+import dev.community.board.controller.dto.BoardCreateRequest;
+import dev.community.board.controller.dto.BoardUpdateRequest;
+import dev.community.board.service.dto.BoardServiceResponse;
+import dev.community.board.service.BoardCommandService;
+import dev.community.board.service.BoardQueryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -14,29 +17,29 @@ import java.util.List;
 @RestController
 public class BoardController {
 
-	private final BoardService boardService;
+	private final BoardCommandService boardCommandService;
+	private final BoardQueryService boardQueryService;
 
 	@GetMapping
-	public List<Board> getBoards() {
-		return boardService.getAllBoards();
+	public List<BoardServiceResponse> getBoards() { return boardQueryService.findAllBoards(); }
+
+	@GetMapping("/{id}")
+	public BoardServiceResponse getBoard(@PathVariable Long id) {
+		return boardQueryService.getBoard(id);
 	}
 
 	@PostMapping
-	public void createBoard(@RequestBody @Valid BoardCreateRequestDto board) {
-		boardService.saveBoard(board);
+	public Long createBoard(Principal principal, @RequestBody @Valid BoardCreateRequest request) {
+		return boardCommandService.create(principal, request);
 	}
 
-	@GetMapping("/{id}")
-	public Board getBoard(@PathVariable Long id) {
-		return boardService.getBoardById(id);
-	}
 
 	@PutMapping("/{id}")
-	public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody @Valid BoardCreateRequestDto board) {
-		return null;
+	public Long updateBoard(Principal principal, @PathVariable Long id, @RequestBody @Valid BoardUpdateRequest request) {
+		return boardCommandService.update(principal, id, request);
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteBoard(@PathVariable Long id) {	}
+	public void deleteBoard(Principal principal, @PathVariable Long id) { boardCommandService.delete(principal, id); }
 }
 
