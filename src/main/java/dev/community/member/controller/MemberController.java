@@ -1,7 +1,6 @@
 package dev.community.member.controller;
 
 import dev.community.member.controller.dto.MemberCreateRequest;
-import dev.community.member.controller.dto.MemberLoginRequest;
 import dev.community.member.controller.dto.MemberUpdateRequest;
 import dev.community.member.service.MemberCommandService;
 import jakarta.validation.Valid;
@@ -33,15 +32,6 @@ public class MemberController {
 	public void deleteMember(Principal principal) {
 		memberCommandService.delete(principal);
 
-	}
-
-	@PostMapping("/login")
-	public String loginMember(@RequestBody @Valid MemberLoginRequest request) {
-		return memberCommandService.login(request);
-	}
-
-	@PostMapping("/logout")
-	public void logoutMember(Principal principal) {
 	}
 
 }
