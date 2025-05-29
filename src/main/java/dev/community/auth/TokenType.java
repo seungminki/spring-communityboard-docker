@@ -1,8 +1,10 @@
 package dev.community.auth;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public enum TokenType {
 
 	AUTHORIZATION_HEADER("Authorization"),
@@ -10,6 +12,4 @@ public enum TokenType {
 	BEARER_PREFIX_LEN("7");
 
 	private final String value;
-
-	TokenType(String value) { this.value = value; }
 }
