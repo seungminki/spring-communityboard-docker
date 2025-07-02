@@ -5,6 +5,7 @@ import dev.community.member.controller.dto.MemberUpdateRequest;
 import dev.community.member.service.MemberCommandService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -24,12 +25,12 @@ public class MemberController {
 
 
 	@PutMapping
-	public Long updateMember(Principal principal, @RequestBody @Valid MemberUpdateRequest request) {
+	public Long updateMember(@AuthenticationPrincipal Principal principal, @RequestBody @Valid MemberUpdateRequest request) {
 		return memberCommandService.update(principal, request);
 	}
 
 	@DeleteMapping
-	public void deleteMember(Principal principal) {
+	public void deleteMember(@AuthenticationPrincipal Principal principal) {
 		memberCommandService.delete(principal);
 
 	}

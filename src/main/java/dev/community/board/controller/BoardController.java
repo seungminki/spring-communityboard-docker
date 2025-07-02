@@ -7,6 +7,7 @@ import dev.community.board.service.BoardCommandService;
 import dev.community.board.service.BoardQueryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -29,17 +30,17 @@ public class BoardController {
 	}
 
 	@PostMapping
-	public Long createBoard(Principal principal, @RequestBody @Valid BoardCreateRequest request) {
+	public Long createBoard(@AuthenticationPrincipal Principal principal, @RequestBody @Valid BoardCreateRequest request) {
 		return boardCommandService.create(principal, request);
 	}
 
 
 	@PutMapping("/{id}")
-	public Long updateBoard(Principal principal, @PathVariable Long id, @RequestBody @Valid BoardUpdateRequest request) {
+	public Long updateBoard(@AuthenticationPrincipal Principal principal, @PathVariable Long id, @RequestBody @Valid BoardUpdateRequest request) {
 		return boardCommandService.update(principal, id, request);
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteBoard(Principal principal, @PathVariable Long id) { boardCommandService.delete(principal, id); }
+	public void deleteBoard(@AuthenticationPrincipal Principal principal, @PathVariable Long id) { boardCommandService.delete(principal, id); }
 }
 
