@@ -8,6 +8,7 @@ import dev.community.board.repository.BoardJpaRepository;
 import dev.community.member.repository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 
@@ -32,13 +33,13 @@ public class BoardCommandService {
 		return board.getId();
 	}
 
+	@Transactional
 	public Long update(Principal principal, Long boardId, BoardUpdateRequest request) {
 
 		authorizedBoard(principal.getName(), boardId);
 
 		Board board = boardJpaRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
 		board.updateBoard(request.title(), request.content());
-		boardJpaRepository.save(board);
 		return board.getId();
 	}
 

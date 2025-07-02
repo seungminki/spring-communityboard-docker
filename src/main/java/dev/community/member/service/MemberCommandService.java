@@ -10,6 +10,7 @@ import dev.community.member.repository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 
@@ -36,13 +37,13 @@ public class MemberCommandService {
 		return member.getId();
 	}
 
+	@Transactional
 	public Long update(Principal principal, MemberUpdateRequest request) {
 		validateAccessEmail(principal.getName());
 		validateDuplicateName(request.name());
 
 		Member member = memberJpaRepository.findByEmail(principal.getName());
 		member.updateName(request.name());
-		memberJpaRepository.save(member);
 
 		return member.getId();
 	}
