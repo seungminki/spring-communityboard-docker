@@ -6,11 +6,13 @@ import dev.community.board.controller.dto.BoardUpdateRequest;
 import dev.community.board.entity.Board;
 import dev.community.board.repository.BoardJpaRepository;
 import dev.community.member.repository.MemberJpaRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -19,7 +21,7 @@ public class BoardCommandService {
 	private final BoardJpaRepository boardJpaRepository;
 	private final MemberJpaRepository memberJpaRepository;
 
-	public Long create(Principal principal, BoardCreateRequest request) {
+	public Long create(Principal principal, @Valid BoardCreateRequest request) {
 		memberJpaRepository.existsByEmail(principal.getName());
 
 		Board board = Board.builder()
@@ -28,9 +30,7 @@ public class BoardCommandService {
 			.member(memberJpaRepository.findByEmail(principal.getName()))
 			.build();
 
-		boardJpaRepository.save(board);
-
-		return board.getId();
+		return boardJpaRepository.save(board).getId();
 	}
 
 	@Transactional
@@ -38,9 +38,9 @@ public class BoardCommandService {
 
 		authorizedBoard(principal.getName(), boardId);
 
-		Board board = boardJpaRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_BOARD_ID.getMessage()));
-		board.updateBoard(request.title(), request.content());
-		return board.getId();
+		Optional<Board> board = boardJpaRepository.findById(boardId);
+		board.get().updateBoard(request.title(), request.content());
+		return board.get().getId();
 	}
 
 	public void delete(Principal principal, Long boardId) {

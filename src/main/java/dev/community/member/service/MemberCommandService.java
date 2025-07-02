@@ -32,9 +32,7 @@ public class MemberCommandService {
 
 		member.encodePassword(passwordEncoder);
 
-		memberJpaRepository.save(member);
-
-		return member.getId();
+		return memberJpaRepository.save(member).getId();
 	}
 
 	@Transactional

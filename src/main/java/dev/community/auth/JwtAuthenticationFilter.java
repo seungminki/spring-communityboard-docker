@@ -1,9 +1,11 @@
 package dev.community.auth;
 
+import jakarta.annotation.Nullable;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,9 +21,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final JwtUtil jwtUtil;
 
 	@Override
-	protected void doFilterInternal(@NonNull HttpServletRequest request,
-									@NonNull HttpServletResponse response,
-									@NonNull FilterChain filterChain)
+	protected void doFilterInternal(@NotNull HttpServletRequest request,
+									@Nullable HttpServletResponse response,
+									@Nullable FilterChain filterChain)
 		throws ServletException, IOException {
 
 		String authHeader = request.getHeader(TokenType.AUTHORIZATION_HEADER.getValue());
@@ -38,7 +40,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			}
 		}
 
-		filterChain.doFilter(request, response);
+		if (filterChain != null) {
+			filterChain.doFilter(request, response);
+		}
 	}
 }
 
