@@ -25,7 +25,7 @@ public class AuthService {
 			throw new IllegalArgumentException(ErrorMessage.NOT_MATCHES_PASSWORD.getMessage());
 		}
 
-		return jwtUtil.createJwt(request.email());
+		return jwtUtil.createJwt(request.email(), member.getName());
 	}
 
 	private void validateAccessEmail(String email) {

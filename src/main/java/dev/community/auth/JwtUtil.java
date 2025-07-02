@@ -1,5 +1,6 @@
- package dev.community.auth;
+package dev.community.auth;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,8 +15,13 @@ public class JwtUtil {
 
 	private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-	public String createJwt(String memberEmail) {
+	public String createJwt(String memberEmail, String memberName) {
+		Claims claims = Jwts.claims();
+		claims.put("email", memberEmail);
+		claims.put("name", memberName);
+
 		return Jwts.builder()
+			.setClaims(claims)
 			.setSubject(memberEmail)
 			.setIssuedAt(new Date())
 			.setExpiration(new Date(System.currentTimeMillis() + TokenExpiration.ACCESS_TOKEN.getExpirationTime()))
